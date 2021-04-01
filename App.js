@@ -1,12 +1,4 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- * @flow strict-local
- */
-
-import React from 'react';
+import React, {useState, useRef} from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
@@ -17,6 +9,9 @@ import {
   useColorScheme,
   View,
   TextInput,
+  Button,
+  Alert,
+  TouchableHighlight,
 } from 'react-native';
 
 import {
@@ -27,82 +22,115 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen';
 
-const Section = ({children, title}): Node => {
-  const isDarkMode = useColorScheme() === 'dark';
-  return (
-    <View style={styles.sectionContainer}>
-      <Text
-        style={[
-          styles.sectionTitle,
-          {
-            color: isDarkMode ? Colors.white : Colors.black,
-          },
-        ]}>
-        {title}
-      </Text>
-      <Text
-        style={[
-          styles.sectionDescription,
-          {
-            color: isDarkMode ? Colors.light : Colors.dark,
-          },
-        ]}>
-        {children}
-      </Text>
-    </View>
-  );
-};
-
 const App: () => Node = () => {
-  const isDarkMode = useColorScheme() === 'dark';
+  const [charArray, setCharArray] = useState([]);
+  const [inputString, setInputString] = useState('');
+  const [renderedImage, setRenderedImage] = useState([]);
+  const [k, setK] = useState(null);
 
-  const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+  const handleKInputChange = text => {
+    if (/^\d+$/.test(text)) {
+      setK(text);
+    }
+  };
+
+  const handleArrayInputChange = text => {
+    if (true) {
+      const arr = text.split('');
+      setCharArray(arr);
+    }
+  };
+
+  const generateImage = (arr, k) => {
+    let p = 0;
+    var result = '';
+    for (var i = 0; i < 21; i++) {
+      for (var ii = 0; ii < 21; ii++) {
+        const sine = Math.sin(p);
+        const decimals = sine % 10;
+        result = result + arr[index];
+        p++;
+      }
+    }
+    renderImage(result);
+  };
+
+  const renderImage = str => {
+    let renderedRows = [];
+    for (var i = 0; i < 21 * 21; i = i + 21) {
+      renderedRows.push(<Text>{str.substring(i, i + 21) + '\n'}</Text>);
+    }
+    setRenderedImage(renderedRows);
   };
 
   return (
-    <SafeAreaView style={backgroundStyle}>
-      <StatusBar barStyle={isDarkMode ? 'light-content' : 'dark-content'} />
-      <ScrollView
-        contentInsetAdjustmentBehavior="automatic"
-        style={backgroundStyle}>
-        <View
-          style={{
-            backgroundColor: isDarkMode ? Colors.black : Colors.white,
-          }}>
-          <Section title="Input an array of chars:"></Section>
-          <TextInput style="stules.input"></TextInput>
-
-          <Section title="Input number k:"></Section>
-          <TextInput style="styles.input"></TextInput>
+    <SafeAreaView>
+      <StatusBar />
+      <ScrollView contentInsetAdjustmentBehavior="automatic">
+        <View style={styles.mainArea}>
+          <Text style={styles.text}>Input an array of 10 characters:</Text>
+          <TextInput
+            style={styles.input}
+            maxLength={10}
+            onChangeText={s => {
+              handleArrayInputChange(s);
+            }}></TextInput>
+          <Text style={styles.text}>Input number k:</Text>
+          <TextInput
+            style={styles.input}
+            keyboardType="number-pad"
+            onChangeText={handleKInputChange}></TextInput>
+          <View style={{height: 10}}></View>
+          <Text style={styles.smallerText}>
+            Array:{' '}
+            {charArray.map((c, i) => {
+              if (i < 9) {
+                return c + ', ';
+              } else {
+                return c + '!!!';
+              }
+            })}
+          </Text>
+          <Text style={styles.smallerText}>K: {k}</Text>
         </View>
+        <TouchableHighlight
+          style={styles.button}
+          onPress={() => generateImage(charArray, k)}>
+          <Text style={{alignSelf: 'center'}}>Generate image</Text>
+        </TouchableHighlight>
+        <Text>{renderedImage}</Text>
       </ScrollView>
     </SafeAreaView>
   );
 };
 
 const styles = StyleSheet.create({
-  sectionContainer: {
-    marginTop: 32,
-    paddingHorizontal: 24,
-  },
-  sectionTitle: {
-    fontSize: 24,
-    fontWeight: '600',
-  },
-  sectionDescription: {
-    marginTop: 8,
-    fontSize: 18,
-    fontWeight: '400',
-  },
-  highlight: {
-    fontWeight: '700',
-  },
   input: {
     height: 40,
-    margin: 12,
-    borderWidth: 5,
+    padding: 10,
+    borderWidth: 2,
     borderColor: 'black',
+  },
+  mainArea: {
+    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+  },
+  text: {
+    fontSize: 20,
+  },
+  smallerText: {
+    fontSize: 18,
+  },
+  button: {
+    backgroundColor: '#f194ff',
+    elevation: 8,
+    borderRadius: 5,
+    marginHorizontal: 20,
+    height: 35,
+    alignContent: 'center',
+    justifyContent: 'center',
+    flex: 1,
   },
 });
 
