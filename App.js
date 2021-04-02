@@ -44,11 +44,15 @@ const App: () => Node = () => {
   const generateImage = (arr, k) => {
     let p = 0;
     var result = '';
-    for (var i = 0; i < 21; i++) {
-      for (var ii = 0; ii < 21; ii++) {
+    for (var i = 0; i <= 21; i++) {
+      for (var ii = 0; ii <= 21; ii++) {
         const sine = Math.sin(p);
-        const decimals = sine % 10;
-        result = result + arr[index];
+        const index =
+          parseInt((sine * Math.pow(10, k)) % 10) < 0
+            ? parseInt((sine * Math.pow(10, k)) % 10) * -1
+            : parseInt((sine * Math.pow(10, k)) % 10);
+        if (arr[index]) result = result + arr[index];
+        else result = result + '*';
         p++;
       }
     }
@@ -57,8 +61,24 @@ const App: () => Node = () => {
 
   const renderImage = str => {
     let renderedRows = [];
-    for (var i = 0; i < 21 * 21; i = i + 21) {
-      renderedRows.push(<Text>{str.substring(i, i + 21) + '\n'}</Text>);
+    var i = 0;
+    var rows = 0;
+    while (rows <= 21) {
+      renderedRows.push(
+        <Text key={i}>
+          <Text>({rows})</Text>
+          <Text
+            style={{
+              textAlign: 'center',
+              color: 'green',
+            }}>
+            {str.substring(i, i + 21)}
+            {'\n'}
+          </Text>
+        </Text>,
+      );
+      i = i + 22;
+      rows++;
     }
     setRenderedImage(renderedRows);
   };
@@ -131,6 +151,12 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     justifyContent: 'center',
     flex: 1,
+  },
+  generatedImage: {
+    padding: 20,
+    flex: 1,
+    justifyContent: 'center',
+    color: 'green',
   },
 });
 
