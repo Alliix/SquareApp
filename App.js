@@ -12,6 +12,9 @@ import {
   Button,
   Alert,
   TouchableHighlight,
+  Dimensions,
+  FlatList,
+  Keyboard,
 } from 'react-native';
 
 import {
@@ -25,8 +28,8 @@ import {
 const App: () => Node = () => {
   const [charArray, setCharArray] = useState([]);
   const [inputString, setInputString] = useState('');
-  const [renderedImage, setRenderedImage] = useState([]);
   const [k, setK] = useState(null);
+  const [resultArray, setResultArray] = useState([]);
 
   const handleKInputChange = text => {
     if (/^\d+$/.test(text)) {
@@ -42,6 +45,7 @@ const App: () => Node = () => {
   };
 
   const generateImage = (arr, k) => {
+    Keyboard.dismiss();
     let p = 0;
     var result = '';
     for (var i = 0; i <= 21; i++) {
@@ -53,40 +57,36 @@ const App: () => Node = () => {
             : parseInt((sine * Math.pow(10, k)) % 10);
         if (arr[index]) result = result + arr[index];
         else result = result + '*';
+        // if(p<5){
+        //   console.log(p, sine, sine * Math.pow(10, k), index, arr[index])
+        // }
         p++;
       }
     }
-    renderImage(result);
+    setResultArray(result);
   };
 
-  const renderImage = str => {
-    let renderedRows = [];
-    var i = 0;
-    var rows = 0;
-    while (rows <= 21) {
-      renderedRows.push(
-        <Text key={i}>
-          <Text>({rows})</Text>
-          <Text
-            style={{
-              textAlign: 'center',
-              color: 'green',
-            }}>
-            {str.substring(i, i + 21)}
-            {'\n'}
-          </Text>
-        </Text>,
-      );
-      i = i + 22;
-      rows++;
+  const formatData = data => {
+    let numberOfElementsLastRow = 21;
+    while (numberOfElementsLastRow !== 21 && numberOfElementsLastRow !== 0) {
+      data.push({key: `blank-${numberOfElementsLastRow}`});
+      numberOfElementsLastRow++;
     }
-    setRenderedImage(renderedRows);
+    return data;
+  };
+
+  const renderItem = ({item, index}) => {
+    return (
+      <View style={styles.item}>
+        <Text style={styles.itemText}>{item}</Text>
+      </View>
+    );
   };
 
   return (
     <SafeAreaView>
       <StatusBar />
-      <ScrollView contentInsetAdjustmentBehavior="automatic">
+      <View>
         <View style={styles.mainArea}>
           <Text style={styles.text}>Input an array of 10 characters:</Text>
           <TextInput
@@ -116,10 +116,16 @@ const App: () => Node = () => {
         <TouchableHighlight
           style={styles.button}
           onPress={() => generateImage(charArray, k)}>
-          <Text style={{alignSelf: 'center'}}>Generate image</Text>
+          <Text style={styles.buttonText}>Generate image</Text>
         </TouchableHighlight>
-        <Text>{renderedImage}</Text>
-      </ScrollView>
+        <FlatList
+          data={formatData(resultArray)}
+          style={styles.container}
+          renderItem={renderItem}
+          numColumns={21}
+          keyExtractor={(item, index) => index}
+        />
+      </View>
     </SafeAreaView>
   );
 };
@@ -132,8 +138,7 @@ const styles = StyleSheet.create({
     borderColor: 'black',
   },
   mainArea: {
-    padding: 20,
-    flex: 1,
+    padding: 10,
     justifyContent: 'center',
   },
   text: {
@@ -143,20 +148,31 @@ const styles = StyleSheet.create({
     fontSize: 18,
   },
   button: {
-    backgroundColor: '#f194ff',
-    elevation: 8,
+    backgroundColor: '#4D243D',
     borderRadius: 5,
     marginHorizontal: 20,
     height: 35,
     alignContent: 'center',
     justifyContent: 'center',
-    flex: 1,
   },
+  buttonText: {alignSelf: 'center', color: 'white', fontSize: 18},
   generatedImage: {
     padding: 20,
     flex: 1,
     justifyContent: 'center',
     color: 'green',
+  },
+  container: {
+    marginVertical: 10,
+  },
+  item: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    flex: 1,
+    height: Dimensions.get('window').width / 21, // approximate a square
+  },
+  itemText: {
+    color: '#4D243D',
   },
 });
 
