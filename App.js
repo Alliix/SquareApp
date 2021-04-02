@@ -48,8 +48,8 @@ const App: () => Node = () => {
     Keyboard.dismiss();
     let p = 0;
     var result = '';
-    for (var i = 0; i <= 21; i++) {
-      for (var ii = 0; ii <= 21; ii++) {
+    for (var i = 0; i < 21; i++) {
+      for (var ii = 0; ii < 21; ii++) {
         const sine = Math.sin(p);
         const index =
           parseInt((sine * Math.pow(10, k)) % 10) < 0
@@ -156,12 +156,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   buttonText: {alignSelf: 'center', color: 'white', fontSize: 18},
-  generatedImage: {
-    padding: 20,
-    flex: 1,
-    justifyContent: 'center',
-    color: 'green',
-  },
   container: {
     marginVertical: 10,
   },
