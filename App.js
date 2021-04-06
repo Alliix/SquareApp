@@ -58,9 +58,9 @@ const App: () => Node = () => {
       for (var ii = 0; ii < 21; ii++) {
         const sine = Math.sin(p);
         const index =
-          parseInt((sine * Math.pow(10, k)) % 10) < 0
-            ? parseInt((sine * Math.pow(10, k)) % 10) * -1
-            : parseInt((sine * Math.pow(10, k)) % 10);
+          (sine * Math.pow(10, k)) % 10 < 0
+            ? (sine * Math.pow(10, k)) % 10 * -1
+            : (sine * Math.pow(10, k)) % 10;
         if (arr[index]) result = result + arr[index];
         else result = result + '*';
         // if(p<5){
