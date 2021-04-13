@@ -77,15 +77,6 @@ const App: () => Node = () => {
     setResultArray(result);
   };
 
-  const formatData = data => {
-    let numberOfElementsLastRow = 21;
-    while (numberOfElementsLastRow !== 21 && numberOfElementsLastRow !== 0) {
-      data.push({key: `blank-${numberOfElementsLastRow}`});
-      numberOfElementsLastRow++;
-    }
-    return data;
-  };
-
   const renderItem = ({item}) => {
     return (
       <View style={styles.item}>
@@ -114,7 +105,7 @@ const App: () => Node = () => {
             }}
           />
           <FlatList
-            data={formatData(resultArray)}
+            data={resultArray}
             style={styles.container}
             renderItem={renderItem}
             numColumns={21}
