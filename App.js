@@ -24,7 +24,6 @@ import {
 
 const App: () => Node = () => {
   const [charArray, setCharArray] = useState([]);
-  const [inputString, setInputString] = useState('');
   const [k, setK] = useState(null);
   const [resultArray, setResultArray] = useState([]);
   let textInputK = null;
@@ -38,7 +37,9 @@ const App: () => Node = () => {
 
   const handleArrayInputChange = text => {
     const arr = text.split('');
-    setCharArray(arr);
+    const filtered = arr.filter(symbol => symbol != ' ');
+    filtered.length = 10;
+    setCharArray(filtered);
   };
 
   const generateImage = (arr, k) => {
@@ -57,14 +58,18 @@ const App: () => Node = () => {
     for (var i = 0; i < 21; i++) {
       for (var ii = 0; ii < 21; ii++) {
         const sine = Math.sin(p);
-        const index =
-          (sine * Math.pow(10, k)) % 10 < 0
-            ? (sine * Math.pow(10, k)) % 10 * -1
-            : (sine * Math.pow(10, k)) % 10;
+        const index = Math.trunc((sine * Math.pow(10, k)) % 10);
+        if (index < 0) index = -index;
         if (arr[index]) result = result + arr[index];
-        else result = result + '*';
-        // if(p<5){
-        //   console.log(p, sine, sine * Math.pow(10, k), index, arr[index])
+        else result = result + ' ';
+        // if (p < 6) {
+        //   console.log({
+        //     p,
+        //     sine: sine,
+        //     calc: sine * Math.pow(10, k),
+        //     index: index,
+        //     symbol: arr[index],
+        //   });
         // }
         p++;
       }
@@ -92,7 +97,6 @@ const App: () => Node = () => {
   const clearImage = () => {
     Keyboard.dismiss();
     setCharArray([]);
-    setInputString('');
     setK(null);
     setResultArray([]);
     textInputK.clear();
@@ -139,7 +143,7 @@ const App: () => Node = () => {
             ref={input => {
               textInputArray = input;
             }}
-            maxLength={10}
+            // maxLength={10}
             onChangeText={s => {
               handleArrayInputChange(s);
             }}
