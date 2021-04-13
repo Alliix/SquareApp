@@ -42,7 +42,7 @@ const App: () => Node = () => {
     setCharArray(filtered);
   };
 
-  const generateImage = (arr, k) => {
+  const generateResultArray = (arr, k) => {
     Keyboard.dismiss();
     setResultArray([]);
     if (!k) {
@@ -63,8 +63,7 @@ const App: () => Node = () => {
         if (arr[index]) result = result + arr[index];
         else result = result + ' ';
         // if (p < 6) {
-        //   console.log({
-        //     p,
+        //   console.log(p, {
         //     sine: sine,
         //     calc: sine * Math.pow(10, k),
         //     index: index,
@@ -163,7 +162,7 @@ const App: () => Node = () => {
         </View>
         <TouchableHighlight
           style={styles.button}
-          onPress={() => generateImage(charArray, k)}>
+          onPress={() => generateResultArray(charArray, k)}>
           <Text style={styles.buttonText}>Generate image</Text>
         </TouchableHighlight>
         <Square />
@@ -211,7 +210,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     flex: 1,
-    height: Dimensions.get('window').width / 21, // approximate a square
+    height: Dimensions.get('window').width / 21,
   },
   itemText: {
     color: '#4D243D',
