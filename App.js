@@ -2,12 +2,13 @@
 // Attēla izmēram jābūt 21x21 simboli. Katra simbola vērtību ņem no 10 simbolu masīva.
 // Simbola indeksu nosaka sin(p) vērtības k-tā cipara aiz komata vērtība,
 // kur p – vietas pozīcija attēlā. Simbolu masīvu un k ievada lietotājs.
+//
+// Risinājuma autore Alīna Govoruhina ag18071 OOP_2021
 
 import React, {useState} from 'react';
 import type {Node} from 'react';
 import {
   SafeAreaView,
-  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
@@ -54,14 +55,14 @@ const App: () => Node = () => {
       return;
     }
     let p = 0;
-    var result = '';
+    var result = [];
     for (var i = 0; i < 21; i++) {
       for (var ii = 0; ii < 21; ii++) {
         const sine = Math.sin(p);
         const index = Math.trunc((sine * Math.pow(10, k)) % 10);
         if (index < 0) index = -index;
-        if (arr[index]) result = result + arr[index];
-        else result = result + ' ';
+        if (arr[index]) result.push(arr[index]);
+        else result.push(' ');
         // if (p < 6) {
         //   console.log(p, {
         //     sine: sine,
